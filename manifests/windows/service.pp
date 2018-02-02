@@ -1,0 +1,4 @@
+class snmp::windows::service {
+
+
+}

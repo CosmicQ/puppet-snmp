@@ -1,4 +1,4 @@
-class snmp::linux_install {
+class snmp::linux::install {
 
   $agent_name = $facts['os']['family'] ? {
     /^(Debian|Ubuntu)$/: => 'snmpd',
