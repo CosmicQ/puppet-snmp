@@ -6,7 +6,6 @@ class snmp {
 
     Class['::snmp::linux::install']
 
-}
   }
   elsif $facts['kernel'] == 'Windows' {
 
