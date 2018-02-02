@@ -1,9 +1,6 @@
 class snmp::linux::config {
 
-  $stuff = "rocommunity ${rocommunity} ${allowed_ip}
-        syscontact ${syscontact}
-        syslocation ${syslocation}
-        "
+  $stuff = "rocommunity ${snmp::rocommunity} ${snmp::allowed_ip}\nsyscontact ${snmp::syscontact}\nsyslocation ${snmp::syslocation}\n"
 
   file { 'snmpd.conf':
     ensure  => present,
