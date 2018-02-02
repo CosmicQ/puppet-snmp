@@ -1,7 +1,8 @@
 class snmp::windows::install {
 
   dism { 'SNMP':
-    ensure => present,
+    ensure    => present,
+    norestart => true,
   }
 
 }
