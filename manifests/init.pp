@@ -19,9 +19,11 @@ class snmp (
   elsif $facts['kernel'] == 'Windows' {
 
     contain snmp::windows::install
+    contain snmp::windows::config
 
     Class['::snmp::windows::install']
-
+    -> Class['::snmp::windows::config']
+    
   }
   else {
     warning('This snmp module does not recognize your kernel')
