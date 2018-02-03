@@ -11,6 +11,7 @@ class snmp (
  	
     contain snmp::linux::install
     contain snmp::linux::config
+    contain snmp::linux::service
 
     Class['::snmp::linux::install']
     -> Class['::snmp::linux::config']
