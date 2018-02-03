@@ -14,6 +14,7 @@ class snmp (
 
     Class['::snmp::linux::install']
     -> Class['::snmp::linux::config']
+    ~> Class['::snmp::linux::service']
 
   }
   elsif $facts['kernel'] == 'Windows' {
