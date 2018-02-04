@@ -26,10 +26,13 @@ class snmp::windows::config {
   }
 
   $snmp::allowed_ip.each |Integer $index, String $value| {
-    registry_value { "HKLM\SYSTEM\CurrentControlSet\\services\SNMP\Parameters\PermittedManagers\${index}":
+    $reg_key   = { "HKLM\SYSTEM\CurrentControlSet\\services\SNMP\Parameters\PermittedManagers\${index}" }
+    $reg_value = {
       ensure => present,
       type   => 'string',
-      data   => ${value},
-    }
+      data   => $value,
+    } 
+    create_resources(registry_value, $reg_key, $reg_value)
+
   }
 }
