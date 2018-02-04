@@ -1,10 +1,10 @@
 class snmp::linux::config {
 
-  $stuff = ""
+  $build_array = $snmp::allowed_ip.map |$ip| { "rocommunity ${snmp::rocommunity} ${ip}" }
 
-  $snmp::allowed_ip.each |String $ip| {
+  $goflat = join($build_array,"\n")
 
-    $stuff = "${stuff}rocommunity ${snmp::rocommunity} ${ip}\nsyscontact ${snmp::syscontact}\nsyslocation ${snmp::syslocation}\n"
+  $snmp_content = "${goflat}\nsyscontact ${snmp::syscontact}\nsyslocation ${snmp::syslocation}\n"
 
   }
 
@@ -14,7 +14,7 @@ class snmp::linux::config {
     owner   => 'root',
     group   => 'root',
     mode    => '0600',
-    content => $stuff,
+    content => $snmp_content,
   }
 
 }
