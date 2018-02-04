@@ -5,7 +5,7 @@ class snmp::linux::config {
 
   $flat_additional = join($snmp::additional,"\n")
 
-  $snmp_content = "${goflat}\nsyscontact ${snmp::syscontact}\nsyslocation ${snmp::syslocation}\n${flat_additional}\n"
+  $snmp_content = "${flat_community}\nsyscontact ${snmp::syscontact}\nsyslocation ${snmp::syslocation}\n${flat_additional}"
 
   file { 'snmpd.conf':
     ensure  => present,
