@@ -4,6 +4,7 @@ class snmp (
   $allowed_ip  = ['127.0.0.1'],
   $syscontact  = 'Sysadmin',
   $syslocation = 'Somewhere',
+  $additional  = [''],
 
 ){
 
