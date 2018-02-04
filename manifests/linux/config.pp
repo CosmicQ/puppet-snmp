@@ -6,8 +6,6 @@ class snmp::linux::config {
 
   $snmp_content = "${goflat}\nsyscontact ${snmp::syscontact}\nsyslocation ${snmp::syslocation}\n"
 
-  }
-
   file { 'snmpd.conf':
     ensure  => present,
     path    => '/etc/snmp/snmpd.conf',
