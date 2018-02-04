@@ -13,12 +13,6 @@ class snmp::windows::config {
     data   => '4',
   }
 
-  registry_value { "HKLM\SYSTEM\CurrentControlSet\\services\SNMP\Parameters\PermittedManagers\1":
-    ensure => present,
-    type   => 'string',
-    data   => $snmp::allowed_ip,
-  }
-
   registry_value { "HKLM\SYSTEM\CurrentControlSet\\services\SNMP\Parameters\RFC1156Agent\sysContact":
     ensure => present,
     type   => 'string',
@@ -31,4 +25,11 @@ class snmp::windows::config {
     data   => $snmp::syslocation,
   }
 
+  $snmp::allowed_ip.each |Integer $index, String $value| {
+    registry_value { "HKLM\SYSTEM\CurrentControlSet\\services\SNMP\Parameters\PermittedManagers\${index}":
+      ensure => present,
+      type   => 'string',
+      data   => ${value},
+    }
+  }
 }
