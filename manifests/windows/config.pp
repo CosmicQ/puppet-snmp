@@ -26,7 +26,7 @@ class snmp::windows::config {
     }
   }
 
-  if $snmp::allowd_ip {
+  if $snmp::allowed_ip {
     $defaults = { ensure => present, type => 'string' }
 
     $snmp::allowed_ip.each |Integer $index, String $value| {
