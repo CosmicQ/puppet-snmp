@@ -4,86 +4,77 @@
 
 1. [Description](#description)
 1. [Setup - The basics of getting started with snmp](#setup)
-    * [What snmp affects](#what-snmp-affects)
     * [Setup requirements](#setup-requirements)
     * [Beginning with snmp](#beginning-with-snmp)
 1. [Usage - Configuration options and additional functionality](#usage)
 1. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
-1. [Limitations - OS compatibility, etc.](#limitations)
-1. [Development - Guide for contributing to the module](#development)
+1. [Known Issues - Current bugs and problems](#issues)
 
 ## Description
 
-Start with a one- or two-sentence summary of what the module does and/or what
-problem it solves. This is your 30-second elevator pitch for your module.
-Consider including OS/Puppet version it works with.
-
-You can give more descriptive information in a second paragraph. This paragraph
-should answer the questions: "What does this module *do*?" and "Why would I use
-it?" If your module has a range of functionality (installation, configuration,
-management, etc.), this is the time to mention it.
+The SNMP module is meant to be a simple way to make sure the SNMP agent is installed,
+configured, and running on both Linux and Windows clients.  The focus at this time is
+just to make sure that SNMP v2c is configured.  SNMP v3 will be coming later.
 
 ## Setup
 
-### What snmp affects **OPTIONAL**
+### Setup Requirements
 
-If it's obvious what your module touches, you can skip this section. For
-example, folks can probably figure out that your mysql_instance module affects
-their MySQL instances.
+This module depends on a few others (mostly because of Windows), so if you are setting
+up your Puppetfile, it should look like:
 
-If there's more that they should know about, though, this is the place to mention:
-
-* A list of files, packages, services, or operations that the module will alter,
-  impact, or execute.
-* Dependencies that your module automatically installs.
-* Warnings or other important notices.
-
-### Setup Requirements **OPTIONAL**
-
-If your module requires anything extra before setting up (pluginsync enabled,
-etc.), mention it here.
-
-If your most recent release breaks compatibility or requires particular steps
-for upgrading, you might want to include an additional "Upgrading" section
-here.
+```
+mod 'snmp'
+    :git => 'https://github.com/CosmicQ/puppet-snmp.git'
+    :default_branch => 'master'
+mod 'puppetlabs-stdlib'
+mod 'puppetlabs-dism'
+mod 'puppetlabs-registry'
+```
 
 ### Beginning with snmp
 
-The very basic steps needed for a user to get the module up and running. This
-can include setup steps, if necessary, or it can be an example of the most
-basic use of the module.
+Adding snmp is as simple as
+
+```
+class { '::snmp': }
+```
+
+This is configure SNMP to run with the default parameters which are:
+
+```
+  $rocommunity = 'public',
+  $allowed_ip  = ['127.0.0.1'],
+  $syscontact  = '',
+  $syslocation = '',
+  $additional  = [''],
+```
 
 ## Usage
 
-This section is where you describe how to customize, configure, and do the
-fancy stuff with your module here. It's especially helpful if you include usage
-examples and code samples for doing things with your module.
+You can override the default values with your own
 
 ## Reference
 
-Users need a complete list of your module's classes, types, defined types providers, facts, and functions, along with the parameters for each. You can provide this list either via Puppet Strings code comments or as a complete list in this Reference section.
+Example of a hiera config:
 
-* If you are using Puppet Strings code comments, this Reference section should include Strings information so that your users know how to access your documentation.
+```
+snmp::rocommunity: 'notpublic'
+snmp::syscontact: 'System Administrator'
+snmp::syslocation: 'Data Center'
+snmp::allowed_ip:
+  - 127.0.0.1
+  - 192.168.1.1
+  - 10.1.2.3
+snmp::additional:
+  - trapsink localhost
+  - disk /
+  - pass 1.3.6.1.4.1.12345.1 /usr/local/bin/myscript.sh
+```
 
-* If you are not using Puppet Strings, include a list of all of your classes, defined types, and so on, along with their parameters. Each element in this listing should include:
+## Known Issues
 
-  * The data type, if applicable.
-  * A description of what the element does.
-  * Valid values, if the data type doesn't make it obvious.
-  * Default value, if any.
+For Windows client, DISM is used to make sure SNMP is enabled and running.  There doesn't seem to be a check first
+to see that it is in fact running, before taking action.  Right now, this reports that SNMP was enabled everytime 
+puppet runs.
 
-## Limitations
-
-This is where you list OS compatibility, version compatibility, etc. If there
-are Known Issues, you might want to include them under their own heading here.
-
-## Development
-
-Since your module is awesome, other users will want to play with it. Let them
-know what the ground rules for contributing are.
-
-## Release Notes/Contributors/Etc. **Optional**
-
-If you aren't using changelog, put your release notes here (though you should
-consider using changelog). You can also add any additional sections you feel
-are necessary or important to include here. Please use the `## ` header.
